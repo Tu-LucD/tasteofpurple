@@ -9,17 +9,24 @@ import {
 import {
   Drawer, List, ListItem,
   ListItemIcon, ListItemText,
-  Container, Typography,
+  Typography, Button, Box,
 } from "@material-ui/core";
 
+//Icons
 import HomeIcon from "@material-ui/icons/Home";
 import InfoIcon from '@material-ui/icons/Info';
+import MenuIcon from '@material-ui/icons/Menu';
 
 //Pages
 import Welcome from "./Pages/Welcome"
+import Schedule from "./Pages/Schedule"
+
+//Databse
+import Firebase from 'firebase';
+import config from './config';
 
 const useStyles = makeStyles((theme) => ({
-  drawerPaper: { width: 'inherit' },
+  drawerPaper: { width: 'inherit',backgroundColor:"#634087" },
   link: {
     textDecoration: 'none',
     color: theme.palette.text.primary
@@ -28,50 +35,64 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+  const [openDrawer,setOpenDrawer] = React.useState(false);
+  Firebase.initializeApp(config.firebase);
   return (
     <Router>
       <div style={{ display: 'flex' }}>
         <Drawer
-          style={{ width: '220px' }}
-          variant="persistent"
+          style={{ width: "20%" }}
           anchor="left"
-          open={true}
+          open={openDrawer}
           classes={{ paper: classes.drawerPaper }}
+          onClose={() =>{setOpenDrawer(!openDrawer)}}
         >
-          <List>
+          <List style={{color:"white"}}>
             <Link to="/" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <HomeIcon />
+                  <HomeIcon style={{ color: "white" }} />
                 </ListItemIcon>
-                <ListItemText primary={"Home"} />
+                <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Home</Typography>} />
               </ListItem>
             </Link>
-            <Link to="/about" className={classes.link}>
+            <Link to="/calendar" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <InfoIcon />
+                  <InfoIcon style={{ color: "white" }} />
                 </ListItemIcon>
-                <ListItemText primary={"About"} />
+                <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Schedule</Typography>} />
               </ListItem>
             </Link>
           </List>
         </Drawer>
-        <Switch>
-          <Route exact path="/">
-            <Welcome/>
-          </Route>
-          <Route exact path="/about">
-            <Container>
-              <Typography variant="h3" gutterBottom>
-                About
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-              </Typography>
-            </Container>
-          </Route>
-        </Switch>
+
+        <Box style={{
+          display:"flex",
+          flexDirection:"column",
+          width:"100%",
+          height:"100%",
+          justifyContent:"center",
+          backgroundColor:"#DEB7FF",
+          color:"#634087"
+        }}>
+          <Button 
+            style={{width:"20%",margin:"auto"}} 
+            onClick={() => {setOpenDrawer(!openDrawer)
+          }}>
+            <MenuIcon fontSize='large'/>
+          </Button>
+
+          {/* Switches */}
+          <Switch>
+            <Route exact path="/">
+              <Welcome />
+            </Route>
+            <Route exact path="/calendar">
+              <Schedule />
+            </Route>
+          </Switch>
+        </Box>
       </div>
     </Router>
   );
