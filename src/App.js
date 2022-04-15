@@ -1,72 +1,39 @@
-import React from 'react';
-import { makeStyles } from "@material-ui/core/styles"
+import React, { useEffect, useState } from 'react';
 
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route
 } from "react-router-dom";
 
-import {
-  Drawer, List, ListItem,
-  ListItemIcon, ListItemText,
-  Typography, Button, Box,
-} from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 
 //Icons
-import HomeIcon from "@material-ui/icons/Home";
-import InfoIcon from '@material-ui/icons/Info';
 import MenuIcon from '@material-ui/icons/Menu';
 
 //Pages
 import Welcome from "./Pages/Welcome"
 import Schedule from "./Pages/Schedule"
 
-//Databse
-import Firebase from 'firebase';
-import config from './config';
-
-const useStyles = makeStyles((theme) => ({
-  drawerPaper: { width: 'inherit',backgroundColor:"#634087" },
-  link: {
-    textDecoration: 'none',
-    color: theme.palette.text.primary
-  }
-}))
+//Database
+import db from "./firebase";
+import { onSnapshot, collection } from "firebase/firestore";
+import SideMenu from './Components/SideMenu';
+import { PlayerContext } from './Contexts/PlayerContext';
 
 function App() {
-  const classes = useStyles();
-  const [openDrawer,setOpenDrawer] = React.useState(false);
-  Firebase.initializeApp(config.firebase);
+  const [players,setPlayers] = useState([])
+  const [openDrawer,setOpenDrawer] = useState(false);
+console.log(players)
+  useEffect(() =>{
+    onSnapshot(collection(db,"Players"),(snapshot) => {
+      setPlayers(snapshot.docs.map(doc => doc.data()));
+    });
+  },[])
+
   return (
     <Router>
       <div style={{ display: 'flex' }}>
-        <Drawer
-          style={{ width: "20%" }}
-          anchor="left"
-          open={openDrawer}
-          classes={{ paper: classes.drawerPaper }}
-          onClose={() =>{setOpenDrawer(!openDrawer)}}
-        >
-          <List style={{color:"white"}}>
-            <Link to="/" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <HomeIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Home</Typography>} />
-              </ListItem>
-            </Link>
-            <Link to="/calendar" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <InfoIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Schedule</Typography>} />
-              </ListItem>
-            </Link>
-          </List>
-        </Drawer>
-
+        <SideMenu open={openDrawer} setOpen={setOpenDrawer} />
         <Box style={{
           display:"flex",
           flexDirection:"column",
@@ -84,14 +51,16 @@ function App() {
           </Button>
 
           {/* Switches */}
-          <Switch>
-            <Route exact path="/">
-              <Welcome />
-            </Route>
-            <Route exact path="/calendar">
-              <Schedule />
-            </Route>
-          </Switch>
+          <PlayerContext.Provider value={players}>
+            <Switch>
+              <Route exact path="/">
+                <Welcome />
+              </Route>
+              <Route exact path="/calendar">
+                <Schedule />
+              </Route>
+            </Switch>
+          </PlayerContext.Provider>
         </Box>
       </div>
     </Router>
