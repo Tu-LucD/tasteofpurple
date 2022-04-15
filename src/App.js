@@ -19,14 +19,23 @@ import db from "./firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import SideMenu from './Components/SideMenu';
 import { PlayerContext } from './Contexts/PlayerContext';
+import Playbook from './Pages/Playbook';
+import Analytics from './Pages/Analytics';
+import Highlights from './Pages/Highlights';
 
 function App() {
   const [players,setPlayers] = useState([])
   const [openDrawer,setOpenDrawer] = useState(false);
-console.log(players)
+
+  const sortById = (a,b) => {
+    if(a.Id < b.Id) return -1
+    if(a.Id > b.Id) return 1
+    return 0
+  }
+
   useEffect(() =>{
     onSnapshot(collection(db,"Players"),(snapshot) => {
-      setPlayers(snapshot.docs.map(doc => doc.data()));
+      setPlayers(snapshot.docs.map(doc => doc.data()).sort(sortById));
     });
   },[])
 
@@ -58,6 +67,15 @@ console.log(players)
               </Route>
               <Route exact path="/calendar">
                 <Schedule />
+              </Route>
+              <Route exact path="/playbook">
+                <Playbook />
+              </Route>
+              <Route exact path="/analytics">
+                <Analytics />
+              </Route>
+              <Route exact path="/highlights">
+                <Highlights />
               </Route>
             </Switch>
           </PlayerContext.Provider>
