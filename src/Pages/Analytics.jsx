@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+// import { Doughnut } from 'react-chartjs-2';
 
 import {
     Box, Typography,
@@ -10,7 +10,7 @@ import { PlayerContext } from '../Contexts/PlayerContext';
 function Analytics() {
     const players = useContext(PlayerContext);
     return(
-        <Box style={{textAlign:'center'}}>
+        <Box style={{textAlign:'center',height:"100%"}}>
             <Typography style={{color:"white"}} variant="h3" gutterBottom>
                 Analytics
             </Typography>

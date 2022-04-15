@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'react-router-dom'
 //MUI
 import {
     Drawer, List, ListItem,
@@ -34,46 +35,46 @@ function SideMenu({open,setOpen}) {
           onClose={() =>{setOpen(!open)}}
         >
           <List style={{color:"white"}}>
-            <Link href="/" className={classes.link}>
+            <NavLink to="/" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <HomeIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Home</Typography>} />
               </ListItem>
-            </Link>
-            <Link href="/calendar" className={classes.link}>
+            </NavLink>
+            <NavLink to="/calendar" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <CalendarTodayIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Schedule</Typography>} />
               </ListItem>
-            </Link>
-            <Link href="/playbook" className={classes.link}>
+            </NavLink>
+            <NavLink to="/playbook" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <MenuBookIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Playbook</Typography>} />
               </ListItem>
-            </Link>
-            <Link href="/analytics" className={classes.link}>
+            </NavLink>
+            <NavLink to="/analytics" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <BarChartIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Analytics</Typography>} />
               </ListItem>
-            </Link>
-            <Link href="/highlights" className={classes.link}>
+            </NavLink>
+            <NavLink to="/highlights" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <CameraIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText primary={<Typography style={{color:"white"}} variant='body1'>Highlights</Typography>} />
               </ListItem>
-            </Link>
+            </NavLink>
           </List>
         </Drawer>
     )

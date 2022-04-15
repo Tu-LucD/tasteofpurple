@@ -1,51 +1,58 @@
-import React, { useContext } from 'react';
-// import Calendar from 'react-calendar';
-// import './Schedule.css';
+import React, { useContext, useEffect, useState } from 'react';
 
 import {
     Container, Grid, Typography,
   } from "@material-ui/core";
 
-import { PlayerContext } from '../Contexts/PlayerContext';
 import Card from '../Components/Card';
+import ScheduleBar from '../Components/ScheduleBar';
+import { GameContext } from '../Contexts/GameContext';
   
 function Schedule() {
-    const players = useContext(PlayerContext);
+    const games = useContext(GameContext)
+    const [season,setSeason] = useState()
+    const [currGame,setCurrGame] = useState();
+    const months = ["Jan","Feb","Mar","Apr","May","Jun",
+                    "Jul","Aug","Sep","Oct","Nov","Dec"]
+
     return(
         <Container style={{textAlign:'center'}}>
             <Typography style={{color:"white"}} variant="h3" gutterBottom>
                 Schedule
             </Typography>
-            <Typography variant="body1" gutterBottom>
-                Select date within rectangle and populate data with states
-            </Typography>
-            <Grid container spacing={10}>
-                <Grid item xs={4}>
-                    <Card title={"Date"} data="April 24th"/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Card title={"Time"} data="5:00 PM"/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Card title={"Court"} data="A"/>
-                </Grid>
-                {/* ----------- */}
-                <Grid item xs={4}>
-                    <Card title={"Score"} data="2-1"/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Card title={"Opponents"} data="Jinchurikis"/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Card title={"MVP"} data="Tu-Luc"/>
-                </Grid>
-                {/* ----------- */}
-            </Grid>
-            {/* <Calendar onChange={(e) => {console.log(e)}}/> */}
+            <ScheduleBar 
+                data={games.filter(game => game.SEASON === season)} 
+                months={months} 
+                season={season} 
+                setSeason={setSeason} 
+                setCurrGame={setCurrGame}
+            />
             {
-                players.map((player) => {
-                    return <p>{player.FIRST_NAME}</p>
-                })
+                currGame ? 
+                //ADD TRANSITION
+                    <Grid container spacing={10}>
+                        <Grid item xs={4}>
+                            <Card title={"Date"} data={months[Number(currGame.MONTH) - 1] + " " + currGame.DATE + " " + currGame.YEAR}/>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Card title={"Time"} data={currGame.TIME}/>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Card title={"Court"} data={currGame.GYM}/>
+                        </Grid>
+                        {/* ----------- */}
+                        <Grid item xs={4}>
+                            <Card title={"Score"} data={currGame.SCORE}/>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Card title={"Opponents"} data={currGame.OPPONENT}/>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Card title={"MVP"} data={currGame.MVP}/>
+                        </Grid>
+                        {/* ----------- */}
+                    </Grid>
+                : null
             }
         </Container>
     )
