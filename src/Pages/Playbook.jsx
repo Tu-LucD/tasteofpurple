@@ -19,7 +19,7 @@ function Playbook(){
             {/* <Calendar onChange={(e) => {console.log(e)}}/> */}
             {
                 players.map((player) => {
-                    return <p>{player.FIRST_NAME}</p>
+                    return <p key={player.FIRST_NAME}>{player.FIRST_NAME}</p>
                 })
             }
         </Box>

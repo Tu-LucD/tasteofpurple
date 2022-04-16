@@ -32,9 +32,9 @@ function ScheduleBar({data,season,setSeason,setCurrGame,months}){
     return(
         <Box className={classes.container}>
             <Box className={classes.header}>
-                <Button disabled={season === 1} onClick={() =>{setSeason(--season)}}><ArrowBackIosIcon fontSize='large'/></Button>
+                <Button disabled={season === 1} onClick={() =>{setSeason(--season)}}><ArrowBackIosIcon style={{ color: "white" }} fontSize='large'/></Button>
                 <Typography variant='h4' gutterBottom>{"Season " + season}</Typography>
-                <Button onClick={() =>{setSeason(++season)}}><ArrowForwardIosIcon fontSize='large'/></Button>
+                <Button onClick={() =>{setSeason(++season)}}><ArrowForwardIosIcon style={{ color: "white" }} fontSize='large'/></Button>
             </Box>
             <Box className={classes.selector}>
             {

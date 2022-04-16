@@ -23,14 +23,13 @@ import SideMenu from './Components/SideMenu';
 //Contexts
 import { PlayerContext } from './Contexts/PlayerContext';
 import { GameContext } from './Contexts/GameContext';
-import { ApplicationProvider } from './Contexts/ApplicationContext';
+import { ApplicationContext } from './Contexts/ApplicationContext';
 
 function App() {
+  const [application,setApplication] = useState();
   const [players,setPlayers] = useState([]);
   const [games,setGames] = useState([]);
   const [openDrawer,setOpenDrawer] = useState(false);
-// console.log("Players",players)
-// console.log("Games",games)
 
   const sortById = (a,b) => {
     if(a.Id < b.Id) return -1
@@ -39,6 +38,9 @@ function App() {
   }
 
   useEffect(() =>{
+    onSnapshot(collection(db,"Application"),(snapshot) => {
+      setApplication(snapshot.docs.map(doc => doc.data())[0]);
+    });
     onSnapshot(collection(db,"Players"),(snapshot) => {
       setPlayers(snapshot.docs.map(doc => doc.data()).sort(sortById));
     });
@@ -48,7 +50,7 @@ function App() {
   },[])
 
   return (
-    <ApplicationProvider>
+    <ApplicationContext.Provider value={application}>
       <GameContext.Provider value={games}>
         <PlayerContext.Provider value={players}>
           <Router>
@@ -92,7 +94,7 @@ function App() {
           </Router>
         </PlayerContext.Provider>
       </GameContext.Provider>
-    </ApplicationProvider>
+    </ApplicationContext.Provider>
   );
 }
 

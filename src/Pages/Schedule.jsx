@@ -7,13 +7,19 @@ import {
 import Card from '../Components/Card';
 import ScheduleBar from '../Components/ScheduleBar';
 import { GameContext } from '../Contexts/GameContext';
+import { ApplicationContext } from '../Contexts/ApplicationContext';
   
 function Schedule() {
+    const application = useContext(ApplicationContext)
     const games = useContext(GameContext)
     const [season,setSeason] = useState()
     const [currGame,setCurrGame] = useState();
     const months = ["Jan","Feb","Mar","Apr","May","Jun",
                     "Jul","Aug","Sep","Oct","Nov","Dec"]
+    
+    useEffect(() => {
+        setSeason(application?.CURRENT_SEASON)
+    },[application])
 
     return(
         <Container style={{textAlign:'center'}}>
@@ -42,13 +48,13 @@ function Schedule() {
                         </Grid>
                         {/* ----------- */}
                         <Grid item xs={4}>
-                            <Card title={"Score"} data={currGame.SCORE}/>
+                            <Card title={"Score"} data={currGame.SCORE ?? "TBD"}/>
                         </Grid>
                         <Grid item xs={4}>
                             <Card title={"Opponents"} data={currGame.OPPONENT}/>
                         </Grid>
                         <Grid item xs={4}>
-                            <Card title={"MVP"} data={currGame.MVP}/>
+                            <Card title={"MVP"} data={currGame.MVP ?? "TBD"}/>
                         </Grid>
                         {/* ----------- */}
                     </Grid>
