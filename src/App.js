@@ -24,11 +24,13 @@ import SideMenu from './Components/SideMenu';
 import { PlayerContext } from './Contexts/PlayerContext';
 import { GameContext } from './Contexts/GameContext';
 import { ApplicationContext } from './Contexts/ApplicationContext';
+import { AttendanceContext } from './Contexts/AttendanceContext';
 
 function App() {
   const [application,setApplication] = useState();
   const [players,setPlayers] = useState([]);
   const [games,setGames] = useState([]);
+  const [attendance,setAttendance] = useState();
   const [openDrawer,setOpenDrawer] = useState(false);
 
   const sortById = (a,b) => {
@@ -47,52 +49,57 @@ function App() {
     onSnapshot(collection(db,"Games"),(snapshot) => {
       setGames(snapshot.docs.map(doc => doc.data()).sort(sortById));
     });
+    onSnapshot(collection(db,"Attendance"),(snapshot) => {
+      setAttendance(snapshot.docs.map(doc => doc.data()));
+    });
   },[])
 
   return (
     <ApplicationContext.Provider value={application}>
       <GameContext.Provider value={games}>
-        <PlayerContext.Provider value={players}>
-          <Router>
-            <div style={{ display: 'flex', height:'100%' }}>
-              <SideMenu open={openDrawer} setOpen={setOpenDrawer} />
-              <Box style={{
-                display:"flex",
-                flexDirection:"column",
-                width:"100%",
-                alignItems:"center",
-                backgroundColor:"#DEB7FF",
-                color:"#634087"
-              }}>
-                <Button 
-                  style={{width:"20%"}} 
-                  onClick={() => {setOpenDrawer(!openDrawer)
+        <AttendanceContext.Provider value={attendance}>
+          <PlayerContext.Provider value={players}>
+            <Router>
+              <div style={{ display: 'flex', height:'100%' }}>
+                <SideMenu open={openDrawer} setOpen={setOpenDrawer} />
+                <Box style={{
+                  display:"flex",
+                  flexDirection:"column",
+                  width:"100%",
+                  alignItems:"center",
+                  backgroundColor:"#DEB7FF",
+                  color:"#634087"
                 }}>
-                  <MenuIcon fontSize='large'/>
-                </Button>
+                  <Button 
+                    style={{width:"20%"}} 
+                    onClick={() => {setOpenDrawer(!openDrawer)
+                  }}>
+                    <MenuIcon fontSize='large'/>
+                  </Button>
 
-                {/* Routes */}
-                  <Switch>
-                    <Route exact path="/">
-                      <Welcome />
-                    </Route>
-                    <Route exact path="/calendar">
-                      <Schedule />
-                    </Route>
-                    <Route exact path="/playbook">
-                      <Playbook />
-                    </Route>
-                    <Route exact path="/analytics">
-                      <Analytics />
-                    </Route>
-                    <Route exact path="/highlights">
-                      <Highlights />
-                    </Route>
-                  </Switch>
-              </Box>
-            </div>
-          </Router>
-        </PlayerContext.Provider>
+                  {/* Routes */}
+                    <Switch>
+                      <Route exact path="/">
+                        <Welcome />
+                      </Route>
+                      <Route exact path="/calendar">
+                        <Schedule />
+                      </Route>
+                      <Route exact path="/playbook">
+                        <Playbook />
+                      </Route>
+                      <Route exact path="/analytics">
+                        <Analytics />
+                      </Route>
+                      <Route exact path="/highlights">
+                        <Highlights />
+                      </Route>
+                    </Switch>
+                </Box>
+              </div>
+            </Router>
+          </PlayerContext.Provider>
+          </AttendanceContext.Provider>
       </GameContext.Provider>
     </ApplicationContext.Provider>
   );

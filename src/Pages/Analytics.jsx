@@ -9,6 +9,7 @@ import MVPPie from '../Components/MVPPie';
 import MVPGrid from '../Components/MVPGrid';
 import { GameContext } from '../Contexts/GameContext';
 import { ApplicationContext } from '../Contexts/ApplicationContext';
+import MoneyChart from '../Components/MoneyChart';
 
 const useStyles = makeStyles(() => ({
     container:{
@@ -32,6 +33,8 @@ function Analytics() {
     const application = useContext(ApplicationContext)
     const games = useContext(GameContext)
 
+    const [season,setSeason] = React.useState()
+
     const seasonGames = games.filter(game => game.SEASON === application?.CURRENT_SEASON)
     const mvps = seasonGames.map(seasonGame => seasonGame?.MVP).filter((seasonGame) => {return seasonGame !== undefined})
     const datas = mvps.reduce((acc, value) => ({
@@ -53,6 +56,7 @@ function Analytics() {
                 <MVPPie labels={mvpNames} counts={mvpCounts} />
                 <MVPGrid labels={mvpNames} counts={mvpCounts} />
             </Box>
+            <MoneyChart season={season} setSeason={setSeason} games={games}/>
         </Box>
     )
 }

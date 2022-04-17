@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import {
-    Container, Grid, Typography,
-  } from "@material-ui/core";
+import {Container, Grid, Typography, Box} from "@material-ui/core";
 
 import Card from '../Components/Card';
 import ScheduleBar from '../Components/ScheduleBar';
 import { GameContext } from '../Contexts/GameContext';
 import { ApplicationContext } from '../Contexts/ApplicationContext';
+import AttendanceList from '../Components/AttendanceList';
+import { PlayerContext } from '../Contexts/PlayerContext';
   
 function Schedule() {
     const application = useContext(ApplicationContext)
     const games = useContext(GameContext)
+    const players = useContext(PlayerContext)
     const [season,setSeason] = useState()
     const [currGame,setCurrGame] = useState();
     const months = ["Jan","Feb","Mar","Apr","May","Jun",
@@ -36,28 +37,31 @@ function Schedule() {
             {
                 currGame ? 
                 //ADD TRANSITION
-                    <Grid container spacing={10}>
-                        <Grid item xs={4}>
-                            <Card title={"Date"} data={months[Number(currGame.MONTH) - 1] + " " + currGame.DATE + " " + currGame.YEAR}/>
+                    <Box>
+                        <Grid container spacing={10}>
+                            <Grid item xs={4}>
+                                <Card title={"Date"} data={months[Number(currGame.MONTH) - 1] + " " + currGame.DATE + " " + currGame.YEAR}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card title={"Time"} data={currGame.TIME}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card title={"Court"} data={currGame.GYM}/>
+                            </Grid>
+                            {/* ----------- */}
+                            <Grid item xs={4}>
+                                <Card title={"Score"} data={currGame.SCORE ?? "TBD"}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card title={"Opponents"} data={currGame.OPPONENT}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Card title={"MVP"} data={currGame.MVP ?? "TBD"}/>
+                            </Grid>
+                            {/* ----------- */}
                         </Grid>
-                        <Grid item xs={4}>
-                            <Card title={"Time"} data={currGame.TIME}/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Card title={"Court"} data={currGame.GYM}/>
-                        </Grid>
-                        {/* ----------- */}
-                        <Grid item xs={4}>
-                            <Card title={"Score"} data={currGame.SCORE ?? "TBD"}/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Card title={"Opponents"} data={currGame.OPPONENT}/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Card title={"MVP"} data={currGame.MVP ?? "TBD"}/>
-                        </Grid>
-                        {/* ----------- */}
-                    </Grid>
+                        <AttendanceList game={currGame} players={players}/>
+                    </Box>
                 : null
             }
         </Container>
