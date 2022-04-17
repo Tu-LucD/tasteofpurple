@@ -27,7 +27,7 @@ function Card({title,data,image}){
                     />
                 :null
             }
-            <Typography>{title}</Typography>
+            <Typography variant='h5'>{title}</Typography>
             <Typography>{data}</Typography>
         </Box>
     )

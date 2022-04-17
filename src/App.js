@@ -32,7 +32,7 @@ function App() {
   const [games,setGames] = useState([]);
   const [attendance,setAttendance] = useState();
   const [openDrawer,setOpenDrawer] = useState(false);
-
+// console.log(players)
   const sortById = (a,b) => {
     if(a.Id < b.Id) return -1
     if(a.Id > b.Id) return 1
@@ -44,13 +44,13 @@ function App() {
       setApplication(snapshot.docs.map(doc => doc.data())[0]);
     });
     onSnapshot(collection(db,"Players"),(snapshot) => {
-      setPlayers(snapshot.docs.map(doc => doc.data()).sort(sortById));
+      setPlayers(snapshot.docs.map((doc) => ({ ...doc.data(), DBID: doc.id })).sort(sortById));
     });
     onSnapshot(collection(db,"Games"),(snapshot) => {
-      setGames(snapshot.docs.map(doc => doc.data()).sort(sortById));
+      setGames(snapshot.docs.map((doc) => ({ ...doc.data(), DBID: doc.id })).sort(sortById));
     });
     onSnapshot(collection(db,"Attendance"),(snapshot) => {
-      setAttendance(snapshot.docs.map(doc => doc.data()));
+      setAttendance(snapshot.docs.map((doc) => ({ ...doc.data(), DBID: doc.id })).sort(sortById));
     });
   },[])
 

@@ -1,4 +1,4 @@
-import React, { useContext }  from 'react';
+import React, { useContext, useEffect }  from 'react';
 
 import {
     Box, Typography,
@@ -44,6 +44,10 @@ function Analytics() {
     const mvpNames = Object.keys(datas)
     const mvpCounts = Object.values(datas)
 
+    useEffect(() => {
+        setSeason(application?.CURRENT_SEASON)
+    },[application])
+
     return(
         <Box className={classes.container}>
             <Typography style={{color:"white"}} variant="h3" gutterBottom>
@@ -56,7 +60,7 @@ function Analytics() {
                 <MVPPie labels={mvpNames} counts={mvpCounts} />
                 <MVPGrid labels={mvpNames} counts={mvpCounts} />
             </Box>
-            <MoneyChart season={season} setSeason={setSeason} games={games}/>
+            <MoneyChart season={season} setSeason={setSeason} games={games} />
         </Box>
     )
 }

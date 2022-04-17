@@ -1,10 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Button, Fade, Modal , TextField, Typography } from '@material-ui/core';
 import  Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from "@material-ui/core/styles"
 
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { AttendanceContext } from '../Contexts/AttendanceContext';
+import { insertMultiple,deleteQuery } from '../utils';
 
 //Database
 // import db from "../firebase";
@@ -12,12 +14,14 @@ import { AttendanceContext } from '../Contexts/AttendanceContext';
 
 const useStyles = makeStyles(() => ({
     container:{
-        width:'30%',
+        width:'28%',
+        padding:'10px 0px',
         border:"5px solid #634087",
         margin:'auto',
         marginTop:'20px',
         display:'flex',
-        flexDirection:'column'
+        flexDirection:'column',
+        alignItems:'center'
     },
     list:{
         display:'flex',
@@ -35,6 +39,11 @@ const useStyles = makeStyles(() => ({
         top:'50%',
         left:'50%',
         transform: 'translate(-50%, -50%)'
+    },
+    buttonContainer:{
+        display:'flex',
+        justifyContent:'space-between',
+        width:"90%"
     }
 }))
 
@@ -46,13 +55,10 @@ function AttendanceList({game,players}){
 
     const classes = useStyles();
 
-    const handleNewAttendances = async (arr) => {
-        console.log(arr)
-        // const docRef = doc(db,"Attendance","id");
-        // const payload = {GAME_ID: 1, PLAYER_ID: 2};
-        // await setDoc(docRef, payload)
-        handleCloseModal()
-    }
+    useEffect(() => {
+        setSelectValue([])
+    },[game])
+
     const handleOpenModal = () =>{
         setOpenModal(true)
     }
@@ -60,18 +66,40 @@ function AttendanceList({game,players}){
         setOpenModal(false)
     }
 
+    const handleNewAttendances = async (arr) => {
+        if(arr.length > 0){
+            const payload = []
+            arr.forEach(item => payload.push({GAME_ID: game.Id, PLAYER_ID: item}))
+            await insertMultiple("Attendance",payload)
+        }
+        else{
+            alert("No players added")
+        }
+        handleCloseModal()
+    }
+
+    const handleDeleteAttendances = async() => {
+        if(gameAttendances.length > 0){
+            deleteQuery("Attendance",["GAME_ID","==",game.Id])
+        }
+        else{
+            alert("No players to delete")
+        }
+    }
+
     return(
         <Box>
             <Box className={classes.container}>
-                <Box style={{display:'flex'}}>
-                    <Typography>Players Present</Typography>
+                <Typography>Players Present</Typography>
+                <Box className={classes.buttonContainer}>
                     <Button onClick={() => handleOpenModal()}><AddIcon /></Button>
+                    <Button onClick={() => handleDeleteAttendances()}><DeleteIcon /></Button>
                 </Box>
                 <Box className={classes.list}>
                 {
                     gameAttendances ? 
                         gameAttendances.filter(attendance => attendance.GAME_ID === game.Id).map((attendance) => {
-                            return <Typography key={attendance.GAME_ID+attendance.PLAYER_ID}>
+                            return <Typography variant='h6' key={attendance.GAME_ID+attendance.PLAYER_ID}>
                                         {players.find(player => player.Id === attendance.PLAYER_ID)?.FIRST_NAME}
                                     </Typography>
                         })
@@ -89,8 +117,8 @@ function AttendanceList({game,players}){
                                 multiple
                                 options={
                                     players.filter(
-                                        player => gameAttendances.find(attendance => player.Id !== attendance.PLAYER_ID) && !selectValue.find(value => player.Id === value)
-                                            )
+                                        player => !gameAttendances.find(attendance => player.Id === attendance.PLAYER_ID) && !selectValue.find(value => player.Id === value)
+                                    )
                                 }
                                 getOptionLabel={(option) => option.FIRST_NAME}
                                 onChange={(e,v) => setSelectValue(v.map(i => i.Id))}
@@ -102,7 +130,7 @@ function AttendanceList({game,players}){
                                     />
                                 )}
                             />
-                            <Box>
+                            <Box className={classes.buttonContainer}>
                                 <Button onClick={() => handleNewAttendances(selectValue)}>Add</Button>
                                 <Button onClick={() => handleCloseModal()}>Cancel</Button>
                             </Box>
