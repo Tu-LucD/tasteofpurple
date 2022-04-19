@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
     }
   }))
 
-function ScheduleBar({data,season,setSeason,setCurrGame,months}){
+function ScheduleBar({data,season,setSeason,currGame,setCurrGame,months}){
     const classes = useStyles();
 
     return(

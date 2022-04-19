@@ -63,7 +63,7 @@ function Welcome() {
         setTotalWins(wins)
         setTotalLosses(losses)
         setWinRate((wins/(wins + losses)*100).toFixed(2))
-    },[games,application,winRate])
+    },[games,application,winRate,seasonGames])
 
     return(
         <Container style={{textAlign:'center'}}>

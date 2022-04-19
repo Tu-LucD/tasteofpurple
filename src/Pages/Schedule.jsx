@@ -13,15 +13,18 @@ function Schedule() {
     const application = useContext(ApplicationContext)
     const games = useContext(GameContext)
     const players = useContext(PlayerContext)
+
     const [season,setSeason] = useState()
     const [currGame,setCurrGame] = useState();
+    // const [section, setSection] = useState();
+
     const months = ["Jan","Feb","Mar","Apr","May","Jun",
                     "Jul","Aug","Sep","Oct","Nov","Dec"]
     
     useEffect(() => {
         setSeason(application?.CURRENT_SEASON)
     },[application])
-
+// console.log(games.filter(game => game.SEASON === season).slice(0,3))
     return(
         <Container style={{textAlign:'center'}}>
             <Typography style={{color:"white"}} variant="h3" gutterBottom>

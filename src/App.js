@@ -26,6 +26,12 @@ import { GameContext } from './Contexts/GameContext';
 import { ApplicationContext } from './Contexts/ApplicationContext';
 import { AttendanceContext } from './Contexts/AttendanceContext';
 
+export const sortById = (a,b) => {
+  if(a.Id < b.Id) return -1
+  if(a.Id > b.Id) return 1
+  return 0
+}
+
 function App() {
   const [application,setApplication] = useState();
   const [players,setPlayers] = useState([]);
@@ -33,11 +39,6 @@ function App() {
   const [attendance,setAttendance] = useState();
   const [openDrawer,setOpenDrawer] = useState(false);
 // console.log(players)
-  const sortById = (a,b) => {
-    if(a.Id < b.Id) return -1
-    if(a.Id > b.Id) return 1
-    return 0
-  }
 
   useEffect(() =>{
     onSnapshot(collection(db,"Application"),(snapshot) => {

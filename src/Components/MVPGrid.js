@@ -1,17 +1,15 @@
-import React, { useContext }  from 'react';
+import React from 'react';
 
-import {
-    Grid, Typography, Item
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
     container:{
-        width:'40%',
-        // height:'30%'
+        width:'30%',
+        margin: '10px 0px'
     },
     item:{
-        border:'1px solid #634087',
+        // border:'1px solid #634087',
         fontWeight:'bold'
     }
 }));
@@ -28,7 +26,7 @@ function MVPGrid({labels,counts}){
 
     return(
         <Grid className={classes.container} container >
-            <Grid className={classes.item} item xs={12}><Typography variant='h7'>Season MVP</Typography></Grid>
+            <Grid className={classes.item} item xs={12}><Typography variant='h5'>Season MVP</Typography></Grid>
             <Grid className={classes.item} item xs={12}><Typography variant='h7'>{mvp}</Typography></Grid>
         </Grid>
     )

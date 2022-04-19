@@ -56,10 +56,8 @@ function Analytics() {
             <Typography style={{color:"white"}} variant="h4" gutterBottom>
                 MVP
             </Typography>
-            <Box className={classes.mvp}>
-                <MVPPie labels={mvpNames} counts={mvpCounts} />
-                <MVPGrid labels={mvpNames} counts={mvpCounts} />
-            </Box>
+            <MVPGrid labels={mvpNames} counts={mvpCounts} />
+            <MVPPie labels={mvpNames} counts={mvpCounts} />
             <MoneyChart season={season} setSeason={setSeason} games={games} />
         </Box>
     )
