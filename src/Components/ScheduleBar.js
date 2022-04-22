@@ -22,11 +22,12 @@ const useStyles = makeStyles(() => ({
         borderBottom:"5px solid #634087"
     },
     selector:{
-        display:"flex"
+        display:"flex",
+        justifyContent:"space-between",
     }
   }))
 
-function ScheduleBar({data,season,setSeason,currGame,setCurrGame,months}){
+function ScheduleBar({data,season,setSeason,setCurrGame,months,section,setSection,seasonLength}){
     const classes = useStyles();
 
     return(
@@ -37,13 +38,15 @@ function ScheduleBar({data,season,setSeason,currGame,setCurrGame,months}){
                 <Button onClick={() =>{setSeason(++season)}}><ArrowForwardIosIcon style={{ color: "white" }} fontSize='large'/></Button>
             </Box>
             <Box className={classes.selector}>
-            {
-                data ? 
-                    data.map((game) => {
-                        return <ScheduleCard key={"game"+game.Id} data={game} months={months} setCurrGame={setCurrGame}/>
-                    })
-                :null
-            }
+                <Button disabled={section === 0} onClick={() =>{setSection(--section)}}><ArrowBackIosIcon style={{ color: "white" }} fontSize='large'/></Button>
+                {
+                    data ? 
+                        data.map((game) => {
+                            return <ScheduleCard key={game.DBID} data={game} months={months} setCurrGame={setCurrGame}/>
+                        })
+                    :null
+                }
+                <Button disabled={section * 3 > seasonLength} onClick={() =>{setSection(++section)}}><ArrowForwardIosIcon style={{ color: "white" }} fontSize='large'/></Button>
             </Box>
         </Box>
     )

@@ -3,11 +3,11 @@ import {collection, setDoc, doc, addDoc, query, where, getDocs, deleteDoc} from 
 export const insertMultiple = async(collectionName,payload) =>{
     const collectionRef = collection(db,collectionName);
     payload.forEach(async item => await addDoc(collectionRef,item))
-    // await addDoc(collectionRef,payload)
 }
 
 export const insertSingle = async(collectionName,payload) =>{
-
+    const collectionRef = collection(db,collectionName);
+    await await addDoc(collectionRef,payload)
 }
 
 export const editMultiple = async(collectionName,payload,id) =>{
@@ -15,7 +15,8 @@ export const editMultiple = async(collectionName,payload,id) =>{
 }
 
 export const editSingle = async(collectionName,payload,id) =>{
-
+    const docRef = doc(db,collectionName,id)
+    setDoc(docRef,payload)
 }
 
 export const deleteQuery = async(collectionName,queryArgs) =>{
