@@ -68,10 +68,11 @@ function Schedule() {
     const handleEditGame =  async () => {
         if(score || mvp){
             const payload = currGame
+            const id = games.find((game) => currGame.Id === game.Id).DBID
             payload.MVP = mvp
             payload.SCORE = score
             delete payload.DBID
-            await editSingle("Games",payload,currGame.DBID)
+            await editSingle("Games",payload,id)
             handleCloseModal()
         }
         else{

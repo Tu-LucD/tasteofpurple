@@ -15,6 +15,9 @@ export const editMultiple = async(collectionName,payload,id) =>{
 }
 
 export const editSingle = async(collectionName,payload,id) =>{
+    console.log(collectionName)
+    console.log(payload)
+    console.log(id)
     const docRef = doc(db,collectionName,id)
     setDoc(docRef,payload)
 }
