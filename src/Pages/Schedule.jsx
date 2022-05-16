@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import {Container, Grid, Typography, Box, Button, Fade, TextField } from "@material-ui/core";
+import {Container, Grid, Typography, Box, Button, Fade, TextField, Modal } from "@material-ui/core";
 
 import Card from '../Components/Card';
 import ScheduleBar from '../Components/ScheduleBar';
@@ -127,17 +127,22 @@ function Schedule() {
                             </Grid>
                             <AttendanceList game={currGame} players={players}/>
                         </Box>
-                        <Fade in={openModal}>
-                            <Box className={classes.modal}>
-                                <Typography style={{color:'white'}} variant='h4'>Edit Game</Typography>
-                                <TextField onChange={(e) => setScore(e.target.value)} id='score' label="Score" value={score}></TextField>
-                                <TextField onChange={(e) => setMvp(e.target.value)} id='mvp' label="MVP" value={mvp}></TextField>
-                                <Box className={classes.buttonContainer}>
-                                    <Button onClick={() => handleEditGame()}>Confirm</Button>
-                                    <Button onClick={() => handleCloseModal()}>Cancel</Button>
+                        <Modal
+                            open={openModal}
+                            onClose={() => handleCloseModal()}
+                        >
+                            <Fade in={openModal}>
+                                <Box className={classes.modal}>
+                                    <Typography style={{color:'white'}} variant='h4'>Edit Game</Typography>
+                                    <TextField onChange={(e) => setScore(e.target.value)} id='score' label="Score" value={score}></TextField>
+                                    <TextField onChange={(e) => setMvp(e.target.value)} id='mvp' label="MVP" value={mvp}></TextField>
+                                    <Box className={classes.buttonContainer}>
+                                        <Button onClick={() => handleEditGame()}>Confirm</Button>
+                                        <Button onClick={() => handleCloseModal()}>Cancel</Button>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Fade>
+                            </Fade>
+                        </Modal>
                     </>
                 : null
             }
